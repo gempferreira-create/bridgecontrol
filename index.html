@@ -270,6 +270,22 @@ h1 .hl i{
 .hero-copy .lead strong{font-weight:800}
 .hero-copy .small{font-size:var(--fs-desc);line-height:var(--lh-desc);color:#403a24}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+/* contactos logo no topo, por baixo dos botões */
+.hero-contactos{
+  display:flex;flex-wrap:wrap;gap:10px 26px;
+  margin-top:20px;padding-top:16px;
+  border-top:1px solid rgba(0,0,0,.22);
+}
+.hero-contactos a{
+  display:flex;flex-direction:column;gap:3px;
+  font-size:var(--fs-desc);font-weight:600;color:#1b1608;
+  line-height:1.2;
+}
+.hero-contactos i{
+  font-style:normal;font-size:var(--fs-label);letter-spacing:var(--ls-label);
+  text-transform:uppercase;font-weight:800;color:#6b5a1c;
+}
+.hero-contactos a:hover{color:#000;text-decoration:underline;text-underline-offset:3px}
 .hero-side{border-left:2px solid rgba(0,0,0,.22);padding-left:22px}
 @media(max-width:850px){.hero-side{border-left:0;padding-left:0}}
 
@@ -572,6 +588,11 @@ footer{
         <div class="hero-actions">
           <a class="cta" href="mailto:jose.ferreira@bridgecontrol.eu?subject=Novo%20Projeto"><span>Enviar projeto</span><span class="arw">→</span></a>
           <a class="cta ghost" href="#servico"><span>Ver o que faço</span></a>
+        </div>
+
+        <div class="hero-contactos">
+          <a href="mailto:jose.ferreira@bridgecontrol.eu"><i>Email</i>jose.ferreira@bridgecontrol.eu</a>
+          <a href="tel:+351912632342"><i>Telefone</i>(+351) 912 632 342</a>
         </div>
       </div>
     </div>
