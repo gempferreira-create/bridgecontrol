@@ -136,20 +136,30 @@ header.is-stuck .logo .bcmark{height:28px}
   .logo .bcmark{height:28px}
 }
 nav.top{display:flex;align-items:center;gap:22px;font-size:14px;font-weight:600}
-/* seletor de língua */
-.langs{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:.06em}
-.langs a{color:#6b5a1c;padding:3px 1px;text-transform:uppercase}
-.langs a::after{display:none}
-.langs a:hover{color:#000}
-.langs a.on{color:#0d0d0d;border-bottom:2px solid var(--ink)}
-.langs em{font-style:normal;color:rgba(0,0,0,.28)}
-/* botão de agendar, contorno preto sobre o amarelo */
-nav.top .mini.ghost{
-  background:transparent;color:var(--ink);border:1.5px solid rgba(0,0,0,.4);
-  padding:7.5px 15px;
+/* seletor de língua — pastilha com a língua ativa preenchida */
+.langs{
+  display:flex;align-items:center;
+  border:1.5px solid rgba(0,0,0,.45);border-radius:999px;overflow:hidden;
+  font-size:12.5px;font-weight:800;letter-spacing:.06em;
 }
-nav.top .mini.ghost:hover{background:rgba(0,0,0,.07);transform:translateY(-2px)}
-@media(max-width:1180px){nav.top .mini.ghost{display:none}}
+.langs a{
+  color:#3d3413;padding:6px 11px;text-transform:uppercase;line-height:1;
+  border-right:1px solid rgba(0,0,0,.22);
+}
+.langs a:last-child{border-right:0}
+.langs a::after{display:none}
+.langs a:hover{background:rgba(0,0,0,.08);color:#000}
+.langs a.on{background:var(--ink);color:var(--yellow)}
+.langs em{display:none}
+/* botão de agendar, branco para se ver sobre o amarelo */
+nav.top .mini.ghost{
+  background:#fff;color:var(--ink);border:1.5px solid var(--ink);
+  padding:8px 16px;
+}
+nav.top .mini.ghost:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+@media(max-width:1240px){nav.top a:not(.mini){display:none}}
+@media(max-width:1240px){nav.top .langs{display:flex}}
+@media(max-width:760px){nav.top .mini.ghost{display:none}}
 nav.top a{position:relative;padding:4px 0;color:#171308}
 nav.top a::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ink);
@@ -584,9 +594,7 @@ footer{
       <a href="#servico">Ce que je fais</a>
       <a href="#processo">Comment ça marche</a>
       <a href="#perguntas">Questions</a>
-      <span class="langs">
-        <a href="/">PT</a><em>·</em><a href="/en/">EN</a><em>·</em><a class="on" href="/fr/">FR</a>
-      </span>
+      <span class="langs"><a href="https://bridgecontrol.eu/">PT</a><a href="https://bridgecontrol.eu/en/">EN</a><a class="on" href="https://bridgecontrol.eu/fr/">FR</a></span>
       <a class="mini ghost" href="mailto:jose.ferreira@bridgecontrol.eu?subject=Prendre%20rendez-vous&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20prendre%20rendez-vous.%0A%0ADisponibilit%C3%A9s%3A%20%0AObjet%3A%20%0A%0AMerci.">Prendre rendez-vous</a>
       <a class="mini" href="mailto:jose.ferreira@bridgecontrol.eu?subject=Nouveau%20projet">Envoyer le projet</a>
     </nav>
