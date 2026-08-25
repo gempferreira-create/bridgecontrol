@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>José Ferreira — Sourcing &amp; Supplier Coordination</title>
+<meta name="description" content="Sourcing e coordenação de fornecedores para carpintaria, mobiliário por medida e FF&E. Encontrar, comparar e coordenar — até existir uma solução clara e executável.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f3ed;
+  --paper-2:#efece3;
+  --ink:#090909;
+  --ink-soft:#2a2a27;
+  --muted:#5f5c55;
+  --faint:#8d887e;
+  --line:#ddd7cb;
+  --line-strong:#c7c0b1;
+  --card:#ffffff;
+  --yellow:#ffca05;
+  --yellow-deep:#f0b800;
+  --yellow-ink:#5a4a00;
+  --max:1220px;
+  --gut:clamp(18px,4vw,34px);
+  --r:16px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+
+  /* escala de texto — a página inteira usa só estes tamanhos */
+  --fs-label:11px;                    /* rótulos em maiúsculas */
+  --ls-label:.18em;
+  --fs-cap:13px;                      /* legendas */
+  --fs-desc:15.5px;                   /* texto de apoio */
+  --lh-desc:1.55;
+  --fs-read:16.5px;                   /* texto de leitura */
+  --lh-read:1.62;
+  --fs-title:clamp(18px,1.5vw,21px);  /* títulos de cartão, linha e pergunta */
+
+  /* ritmo vertical — distância única entre o título da secção e o bloco */
+  --gap-block:clamp(26px,3vw,38px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;
+  /* luz presa ao ecrã: o creme ganha profundidade e o conteúdo passa por cima */
+  background:
+    radial-gradient(56% 38% at 84% 8%,rgba(255,202,5,.16),rgba(255,202,5,0) 70%),
+    radial-gradient(44% 34% at 6% 46%,rgba(133,114,80,.10),rgba(133,114,80,0) 72%),
+    radial-gradient(62% 42% at 66% 92%,rgba(255,202,5,.13),rgba(255,202,5,0) 72%),
+    var(--paper);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.5;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* grão de papel */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  pointer-events:none;
+  opacity:.5;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.16'/></svg>");
+}
+/* no telemóvel a luz deixa de estar presa ao ecrã: iOS não trata bem
+   fundos fixos e não vale a pena arriscar repaints */
+@media(max-width:900px){body{background-attachment:scroll}}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--yellow);color:var(--ink)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:4px}
+.wrap{width:min(calc(100% - (var(--gut) * 2)),var(--max));margin-inline:auto}
+
+h1,h2,h3,.display{
+  font-family:"Inter Tight",Inter,Arial,sans-serif;
+  font-weight:900;
+  letter-spacing:-.045em;
+  line-height:1.02;
+  margin:0;
+  text-wrap:balance;
+}
+.serif{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.01em}
+
+/* ---------- barra de progresso + header ---------- */
+.progress{
+  position:fixed;top:0;left:0;height:3px;width:100%;
+  transform:scaleX(0);transform-origin:0 50%;
+  background:var(--ink);z-index:120;
+}
+header{
+  position:sticky;top:0;z-index:100;
+  background:var(--yellow);
+  border-bottom:1px solid rgba(0,0,0,.16);
+  transition:padding .3s var(--ease),box-shadow .3s var(--ease);
+}
+header.is-stuck{box-shadow:0 10px 30px -18px rgba(0,0,0,.55)}
+.header-row{
+  display:flex;align-items:center;justify-content:space-between;gap:22px;
+  padding:15px 0;transition:padding .3s var(--ease);
+}
+header.is-stuck .header-row{padding:9px 0}
+.logo{
+  font-family:"Inter Tight",Inter,sans-serif;
+  font-weight:900;letter-spacing:-.05em;font-size:20px;
+  display:flex;align-items:center;gap:13px;white-space:nowrap;
+}
+/* marca Bridge Control */
+.bcmark{
+  width:auto;height:1em;aspect-ratio:609.41/400.78;flex:0 0 auto;
+  color:currentColor;display:block;
+}
+.logo .bcmark{
+  height:34px;
+  transition:transform .3s var(--ease);
+}
+.logo:hover .bcmark{transform:translateY(-1px) scale(1.03)}
+header.is-stuck .logo .bcmark{height:28px}
+.logo-txt{display:flex;flex-direction:column;line-height:1}
+.logo-txt em{
+  font-style:normal;font-family:Inter,sans-serif;font-weight:700;
+  font-size:var(--fs-label);letter-spacing:var(--ls-label);
+  text-transform:uppercase;color:#4a3f18;margin-top:5px;
+}
+@media(max-width:520px){
+  .logo{font-size:17px;gap:10px}
+  .logo .bcmark{height:28px}
+}
+nav.top{display:flex;align-items:center;gap:26px;font-size:14px;font-weight:600}
+nav.top a{position:relative;padding:4px 0;color:#171308}
+nav.top a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ink);
+  transform:scaleX(0);transform-origin:0 50%;transition:transform .28s var(--ease);
+}
+nav.top a:hover::after{transform:scaleX(1)}
+nav.top .mini{
+  background:var(--ink);color:#fff;border-radius:999px;padding:9px 17px;font-weight:700;font-size:14px;
+  transition:transform .25s var(--ease),background .25s var(--ease);
+}
+nav.top .mini::after{display:none}
+nav.top .mini:hover{transform:translateY(-2px);background:#000}
+@media(max-width:900px){nav.top a:not(.mini){display:none}}
+
+/* ---------- botões ---------- */
+.cta{
+  --b:var(--ink);--f:#fff;
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--b);color:var(--f);
+  border-radius:999px;padding:16px 24px;
+  font-size:14.5px;font-weight:800;letter-spacing:-.01em;
+  position:relative;overflow:hidden;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+  box-shadow:0 12px 26px -18px rgba(0,0,0,.8);
+}
+.cta span{position:relative;z-index:1}
+.cta .arw{
+  position:relative;z-index:1;display:inline-block;
+  transition:transform .35s var(--ease);
+}
+.cta:hover{transform:translateY(-3px);box-shadow:0 18px 34px -18px rgba(0,0,0,.75)}
+.cta:hover .arw{transform:translateX(5px)}
+.cta.light{--b:var(--yellow);--f:var(--ink)}
+.cta.ghost{
+  background:transparent;color:var(--ink);
+  border:1.5px solid rgba(0,0,0,.35);box-shadow:none;font-weight:700;
+}
+.cta.ghost:hover{background:rgba(0,0,0,.06)}
+
+/* ---------- hero ---------- */
+.hero{
+  background:var(--yellow);
+  padding:clamp(52px,7vw,88px) 0 clamp(40px,5vw,60px);
+  position:relative;overflow:hidden;
+  isolation:isolate;
+}
+.hero > .wrap{position:relative;z-index:3}
+
+/* camada 1 — folha técnica: grelha fina com linha forte de 5 em 5 */
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    repeating-linear-gradient(90deg,rgba(9,9,9,.10) 0 1px,transparent 1px 232px),
+    repeating-linear-gradient(0deg,rgba(9,9,9,.10) 0 1px,transparent 1px 232px),
+    repeating-linear-gradient(90deg,rgba(9,9,9,.042) 0 1px,transparent 1px 58px),
+    repeating-linear-gradient(0deg,rgba(9,9,9,.042) 0 1px,transparent 1px 58px);
+  -webkit-mask-image:linear-gradient(200deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.3) 48%,rgba(0,0,0,0) 78%);
+  mask-image:linear-gradient(200deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.3) 48%,rgba(0,0,0,0) 78%);
+}
+
+/* camada 2 — luz que respira sobre a grelha */
+.hero::after{
+  content:"";position:absolute;left:-25%;top:-55%;width:150%;height:210%;
+  pointer-events:none;z-index:1;
+  background:
+    radial-gradient(38% 42% at 78% 30%,rgba(255,255,255,.62),rgba(255,255,255,0) 68%),
+    radial-gradient(30% 34% at 22% 78%,rgba(255,255,255,.34),rgba(255,255,255,0) 70%),
+    radial-gradient(46% 50% at 52% 8%,rgba(158,110,0,.14),rgba(158,110,0,0) 72%);
+  animation:respira 26s var(--ease) infinite alternate;
+  will-change:transform;
+}
+@keyframes respira{
+  from{transform:translate3d(-2.5%,-1.5%,0) scale(1)}
+  to{transform:translate3d(3%,2.5%,0) scale(1.09)}
+}
+
+/* camada 3 — a marca, grande, cortada pelo canto */
+.hero-mark{
+  position:absolute;z-index:2;pointer-events:none;
+  right:-6%;bottom:-13%;
+  width:min(46vw,640px);height:auto;aspect-ratio:609.41/400.78;
+  color:var(--ink);opacity:.085;
+  --bc-arco:rgba(9,9,9,.5);
+}
+@media(max-width:900px){
+  .hero-mark{right:-16%;bottom:-8%;width:78vw;opacity:.06}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero::after{animation:none;transform:translate3d(0,0,0) scale(1.03)}
+}
+.eyebrow{
+  font-size:var(--fs-label);text-transform:uppercase;letter-spacing:var(--ls-label);font-weight:800;
+  display:inline-flex;align-items:center;gap:10px;color:#1b1608;
+}
+.eyebrow::before{content:"";width:26px;height:2px;background:currentColor;display:block}
+h1{
+  font-size:clamp(40px,6.4vw,86px);
+  letter-spacing:-.055em;
+  max-width:15.5ch;
+  margin:22px 0 0;
+}
+h1 .hl{position:relative;white-space:nowrap;display:inline-block}
+h1 .hl::after{
+  content:"";position:absolute;left:-.07em;right:-.07em;top:-.06em;bottom:-.12em;border-radius:.05em;
+  background:var(--ink);z-index:0;transform:scaleX(0);transform-origin:0 50%;
+  animation:sweep .85s var(--ease) .35s forwards;
+}
+.hero.reduced h1 .hl::after{animation:none;transform:scaleX(1)}
+h1 .hl i{
+  font-style:normal;position:relative;z-index:1;color:var(--ink);
+  animation:inkflip .3s ease 1.02s forwards;
+}
+.hero.reduced h1 .hl i{animation:none;color:var(--yellow)}
+@keyframes sweep{to{transform:scaleX(1)}}
+@keyframes inkflip{to{color:var(--yellow)}}
+/* em ecrãs estreitos a frase parte-se: o realce passa a acompanhar as linhas */
+@media(max-width:520px){
+  h1{font-size:clamp(32px,8.8vw,44px)}
+  h1 .hl{white-space:normal}
+  h1 .hl::after{display:none}
+  h1 .hl i{
+    background:var(--ink);color:var(--yellow);
+    padding:.04em .12em;border-radius:.05em;
+    -webkit-box-decoration-break:clone;box-decoration-break:clone;
+    animation:none;
+  }
+}
+.hero-copy{
+  margin-top:clamp(26px,3.4vw,40px);
+  display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(28px,4vw,58px);align-items:end;
+}
+.hero-copy .lead{
+  margin:0;font-size:clamp(18px,1.85vw,25px);line-height:1.28;letter-spacing:-.028em;font-weight:500;
+  max-width:30ch;
+}
+.hero-copy .lead strong{font-weight:800}
+.hero-copy .small{font-size:var(--fs-desc);line-height:var(--lh-desc);color:#403a24}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.hero-side{border-left:2px solid rgba(0,0,0,.22);padding-left:22px}
+@media(max-width:850px){.hero-side{border-left:0;padding-left:0}}
+
+/* números */
+.stats{
+  margin-top:clamp(34px,4.4vw,54px);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1.5px solid rgba(0,0,0,.25);
+}
+.stat{padding:20px 22px 4px 0;position:relative}
+.stat + .stat{padding-left:22px;border-left:1px solid rgba(0,0,0,.16)}
+.stat b{
+  font-family:"Inter Tight",Inter,sans-serif;
+  display:block;font-size:clamp(34px,4.6vw,58px);font-weight:900;letter-spacing:-.06em;line-height:.95;
+}
+.stat small{display:block;margin-top:10px;font-size:var(--fs-cap);line-height:1.45;color:#4a4327;max-width:24ch;font-weight:500}
+@media(max-width:700px){
+  .stats{grid-template-columns:1fr}
+  .stat + .stat{padding-left:0;border-left:0;border-top:1px solid rgba(0,0,0,.16)}
+}
+
+/* ---------- faixa deslizante ---------- */
+.marquee{
+  background:var(--ink);color:var(--paper);
+  padding:16px 0;overflow:hidden;white-space:nowrap;
+  border-bottom:1px solid #000;
+}
+.marquee .track{display:inline-flex;gap:0;animation:slide 60s linear infinite;will-change:transform}
+.marquee .grp{display:inline-flex;align-items:center}
+.marquee em{
+  font-style:normal;font-family:"Inter Tight",Inter,sans-serif;font-weight:800;
+  font-size:14px;letter-spacing:.16em;text-transform:uppercase;padding:0 26px;
+  display:inline-flex;align-items:center;gap:26px;
+}
+.marquee em::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--yellow);display:block}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- secções ---------- */
+section{padding:clamp(52px,6.4vw,92px) 0;border-top:1px solid var(--line);position:relative;scroll-margin-top:74px}
+.section-grid{display:grid;grid-template-columns:216px 1fr;gap:clamp(26px,3.6vw,54px)}
+.kicker{
+  font-size:var(--fs-label);text-transform:uppercase;letter-spacing:var(--ls-label);font-weight:800;color:var(--ink);
+  position:sticky;top:96px;align-self:start;
+}
+.kicker::before{
+  content:"";display:block;width:34px;height:6px;background:var(--yellow);margin-bottom:12px;border-radius:999px;
+}
+/* margem de folha técnica: tracejado que acompanha o rótulo da secção */
+.kicker::after{
+  content:"";display:block;margin-top:20px;height:148px;width:124px;
+  background:repeating-linear-gradient(-45deg,rgba(9,9,9,.07) 0 1px,transparent 1px 10px);
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,0));
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,0));
+}
+h2{font-size:clamp(28px,3.5vw,50px);max-width:19ch}
+h2 .thin{font-weight:500;color:var(--muted)}
+.sub{margin:16px 0 0;color:var(--muted);font-size:var(--fs-read);line-height:var(--lh-read);max-width:62ch}
+@media(max-width:1080px){
+  .section-grid{grid-template-columns:1fr;gap:22px}
+  .kicker{position:static}
+  .kicker::after{display:none}
+}
+
+/* ---------- problema ---------- */
+.problem-list{margin-top:var(--gap-block);border-top:1px solid var(--line-strong)}
+.problem{
+  display:grid;grid-template-columns:44px 1fr 1.5fr;gap:clamp(14px,2.4vw,34px);
+  padding:22px 0;border-bottom:1px solid var(--line);
+  position:relative;transition:padding-left .35s var(--ease);
+}
+.problem::before{
+  content:"";position:absolute;left:0;top:-1px;bottom:-1px;width:0;background:var(--yellow);
+  z-index:-1;transition:width .4s var(--ease);
+}
+.problem:hover{padding-left:16px}
+.problem:hover::before{width:calc(100% + 16px)}
+.problem .n{font-size:var(--fs-label);font-weight:800;color:var(--faint);padding-top:6px;letter-spacing:var(--ls-label)}
+.problem strong{font-family:"Inter Tight",Inter,sans-serif;font-size:var(--fs-title);letter-spacing:-.035em;line-height:1.22}
+.problem span{color:var(--muted);line-height:var(--lh-desc);font-size:var(--fs-desc)}
+.problem:hover span,.problem:hover .n{color:var(--ink-soft)}
+@media(max-width:760px){.problem{grid-template-columns:28px 1fr}.problem span{grid-column:2}}
+
+/* ---------- cartões ---------- */
+.triplet{margin-top:var(--gap-block);display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:28px 26px 30px;min-height:264px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s var(--ease);
+}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--yellow)}
+.card::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:var(--yellow);
+  opacity:.14;transition:height .45s var(--ease);
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 26px 44px -30px rgba(0,0,0,.5);border-color:var(--line-strong)}
+.card:hover::after{height:100%}
+.card b{
+  font-family:"Inter Tight",Inter,sans-serif;
+  display:block;font-size:var(--fs-label);text-transform:uppercase;letter-spacing:var(--ls-label);color:var(--yellow-ink);
+  font-weight:800;position:relative;z-index:1;
+}
+.card .ghostnum{
+  position:absolute;right:14px;top:2px;font-family:"Inter Tight",Inter,sans-serif;font-weight:900;
+  font-size:96px;letter-spacing:-.08em;color:var(--yellow);opacity:.22;line-height:1;pointer-events:none;
+  transition:transform .5s var(--ease),opacity .5s var(--ease);
+}
+.card:hover .ghostnum{transform:translateY(-6px) scale(1.06);opacity:.34}
+.card h3{font-size:var(--fs-title);line-height:1.22;margin:auto 0 12px;letter-spacing:-.04em;position:relative;z-index:1}
+.card p{margin:0;color:var(--muted);font-size:var(--fs-desc);line-height:var(--lh-desc);position:relative;z-index:1}
+@media(max-width:900px){.triplet{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:660px){.triplet{grid-template-columns:1fr}.card{min-height:0}}
+
+/* ---------- processo ---------- */
+.process{
+  margin-top:var(--gap-block);
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card);
+}
+.step{
+  padding:22px 16px 20px;min-height:150px;border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:14px;position:relative;
+  transition:background .35s var(--ease);
+}
+.step:last-child{border-right:0}
+.step:hover{background:var(--paper-2)}
+.step .bad{
+  width:30px;height:30px;border-radius:50%;background:var(--yellow);
+  display:grid;place-items:center;font-size:var(--fs-label);font-weight:800;color:var(--ink);
+  font-family:"Inter Tight",Inter,sans-serif;flex:0 0 auto;
+  transition:transform .35s var(--ease);
+}
+.step:hover .bad{transform:scale(1.12)}
+.step strong{font-family:"Inter Tight",Inter,sans-serif;font-size:var(--fs-desc);letter-spacing:-.03em;line-height:1.25;margin-top:auto}
+@media(max-width:820px){.process{grid-template-columns:repeat(3,1fr)}.step{border-bottom:1px solid var(--line)}}
+@media(max-width:620px){.process{grid-template-columns:repeat(2,1fr)}.step{min-height:120px}}
+
+/* ---------- quem sou ---------- */
+.about{
+  margin-top:var(--gap-block);
+  display:grid;grid-template-columns:1.32fr .68fr;gap:clamp(26px,3.4vw,44px);
+  border-top:1px solid var(--line-strong);padding-top:var(--gap-block);
+}
+.about-copy{max-width:66ch;font-size:var(--fs-read);line-height:var(--lh-read);color:var(--ink-soft)}
+.about-copy p{margin:0 0 14px}
+.about-copy p:last-child{margin-bottom:0}
+.about-copy strong{color:var(--ink);font-weight:700}
+.pull{
+  font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;
+  font-size:clamp(21px,2.2vw,29px);line-height:1.22;letter-spacing:-.02em;color:var(--ink);
+  border-left:5px solid var(--yellow);padding:4px 0 4px 20px;margin:22px 0 !important;
+}
+.about-side div{
+  padding:14px 0;border-bottom:1px solid var(--line);
+  font-size:var(--fs-desc);color:var(--muted);line-height:var(--lh-desc);
+}
+.about-side div:first-child{padding-top:0}
+.about-side strong{
+  display:block;color:var(--ink);margin-bottom:5px;font-size:var(--fs-desc);font-weight:700;
+  font-family:"Inter Tight",Inter,sans-serif;letter-spacing:-.02em;
+}
+@media(max-width:820px){.about{grid-template-columns:1fr}}
+
+/* ---------- FAQ ---------- */
+.faq{margin-top:var(--gap-block);border-top:1px solid var(--line-strong)}
+details{border-bottom:1px solid var(--line)}
+details summary{
+  list-style:none;cursor:pointer;padding:22px 46px 22px 0;position:relative;
+  font-family:"Inter Tight",Inter,sans-serif;font-size:var(--fs-title);line-height:1.22;font-weight:700;letter-spacing:-.032em;
+  transition:color .25s var(--ease);
+}
+details summary::-webkit-details-marker{display:none}
+details summary::after{
+  content:"";position:absolute;right:6px;top:50%;width:13px;height:13px;margin-top:-7px;
+  border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);
+  transform:rotate(45deg) translateY(-3px);transition:transform .35s var(--ease);
+}
+details[open] summary::after{transform:rotate(-135deg) translateY(-3px)}
+details[open] summary{color:var(--ink)}
+details summary:hover{color:var(--yellow-ink)}
+.ans{padding:0 clamp(0px,8vw,120px) 24px 0;color:var(--muted);font-size:var(--fs-read);line-height:var(--lh-read);max-width:70ch}
+.ans strong{color:var(--ink);font-weight:700}
+details[open] .ans{animation:fade .4s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* ---------- final ---------- */
+.final{padding:clamp(56px,6vw,84px) 0 clamp(60px,7vw,96px);border-top:0}
+.final-box{
+  background:var(--ink);color:#fff;border-radius:26px;
+  padding:clamp(30px,4.4vw,56px);
+  display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(26px,3.6vw,46px);align-items:end;
+  position:relative;overflow:hidden;
+}
+.final-box::before{
+  content:"";position:absolute;left:-90px;bottom:-140px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,202,5,.20),rgba(255,202,5,0) 65%);
+}
+/* mesma folha técnica do hero, agora em branco sobre o preto */
+.final-box::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 232px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,transparent 1px 232px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 58px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,transparent 1px 58px);
+  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.25) 55%,rgba(0,0,0,0) 85%);
+  mask-image:linear-gradient(160deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.25) 55%,rgba(0,0,0,0) 85%);
+}
+.final-box > *{position:relative;z-index:1}
+.final .eyebrow{color:var(--yellow)}
+.final h2{color:#fff;font-size:clamp(28px,3.5vw,50px);margin-top:20px}
+.final p{color:#b9b6ae;margin:18px 0 0;max-width:60ch;line-height:var(--lh-read);font-size:var(--fs-read)}
+.contact-side{display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+.bc-lockup{
+  display:flex;align-items:center;gap:14px;color:#fff;
+  --bc-arco:var(--yellow);
+}
+.bc-lockup .bcmark{height:46px}
+.bc-lockup span{
+  font-family:"Inter Tight",Inter,sans-serif;font-weight:800;
+  font-size:17px;letter-spacing:-.03em;line-height:1;
+}
+.contact-lines{font-size:var(--fs-desc);color:#8f8b83;line-height:2;width:100%}
+.contact-lines a{color:#fff;font-weight:600;border-bottom:1px solid rgba(255,255,255,.28)}
+.contact-lines a:hover{border-color:var(--yellow);color:var(--yellow)}
+.contact-lines i{font-style:normal;display:inline-block;width:80px;color:#6f6b64;font-size:var(--fs-label);
+  letter-spacing:var(--ls-label);text-transform:uppercase}
+@media(max-width:900px){.final-box{grid-template-columns:1fr}}
+
+footer{
+  border-top:1px solid var(--line);padding:22px 0 34px;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:var(--fs-cap);color:var(--faint);
+  align-items:center;
+}
+.foot-brand{display:flex;align-items:center;gap:11px}
+.foot-brand .bcmark{height:22px;color:var(--faint)}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<!-- marca Bridge Control, desenhada uma vez e reutilizada -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="bcmark" viewBox="0 0 609.41 400.78">
+    <g fill="currentColor">
+      <path d="M350.38,195.8c-1.01,41.42,5.37,86.85,40.4,114.52,25.76,20.35,66.79,24.02,96.1,9.23,22.16-11.18,37.19-31.98,41.7-56.28.18-.97,1.07-1.57,2.06-1.57l29.96.13,48.53-.08c.81,11.84-5.53,33.29-9.92,44.4-5.02,12.71-13.82,27.05-22.53,37.52-28.53,34.29-68.85,53.1-113.29,56.45-34.4,2.6-68.24-2.28-99.42-17.18-8.02-3.83-15.24-8.47-22.51-13.44-12.23-8.35-23.95-20.14-33.1-31.93-17.93-23.09-30.04-49.33-35.68-78.15-4.24-21.68-6.17-43.37-5.96-64.64,14.71-3.16,51.05-3.5,65.97-1.6,6.76.86,11.29,1.04,17.7,2.63Z"/>
+      <path d="M508.49,98.56c-20.22-22.74-51.75-29.71-80.93-24.27-24.14,4.5-43.3,18.48-56.34,38.93-12.61,19.76-17.48,40.71-20.09,64-2.15.26-4.19-.37-6.44-.88-24.63-3.67-50.96-3.81-75.99-.3,1.76-33.89,9.65-64.9,27.13-94.29,15.08-24.07,34.15-43.94,58.73-58.27,44.91-26.19,110.04-30.91,158.12-11.94,18.5,7.3,35.23,17.48,49.88,30.92,24.33,22.33,40.57,53.71,45.58,86.27.71,4.59,1.67,8.77,1.08,13.45-3.54-.27-6.97-.36-10.79-.35l-67.9.08c-1.55,0-2.44-1.6-2.58-2.78-.52-4.52-1.94-8.39-3.43-12.59-3.68-10.39-8.71-19.75-16.04-27.99Z"/>
+      <path d="M163.66,226.88c4.52-4.12,21.95-11.52,28.53-13.78l19.29-6.63c6.62-2.27,26.68-8.16,33-7.28,4.35,3.33,11.07,3.32,11.02,8.17-.17,16.53,3.66,44.31,7.58,60.53,4.66,19.34,14.59,46.94,26.54,62.67,1.1,1.45,1.52,3.47.52,5.24-23.85,42.47-69.73,58.13-116.55,58.17l-51.09.04H5.61c-2.11,0-3.6.15-5.4-.4L.18,11.69c0-2.09-.64-3.07.5-4.41h161.77c22.64.01,51.46,3.95,71.46,13.88,20.03,9.95,34.67,23.13,44.66,43.27,1.86,3.75,3.09,7.56,4.57,11.41,1,2.61.15,4.76-.99,7.03-4.63,9.19-8.64,18.28-12.29,27.9-5.92,15.63-11.17,39.63-12.66,56.29-.25,2.84-1.63,4.65-3.73,6.25-5.06,3.85-10.34,6.71-16.54,8.49-32.82,9.42-50.29,15.98-79.59,33.53-4.61,2.76-8.61,5.96-12.97,9.04-2.29,1.56-4.94,1.42-7.76,1.42l-53.52.06-.05,100.5c0,.94.66,1.58,1.57,1.58l70.91-.1c25.69-.04,53.28-9.56,59.1-37.32,2.96-14.12.34-32.74-8.6-44.37-10.02-13.04-27.31-17.65-42.37-19.26ZM83.32,73.46c-.32,3.47-.17,6.99-.17,11.08l-.08,80.79c0,1.21,1.08,1.67,2.07,1.67l62.44-.02c2.24,0,4.09-.05,5.8-.28.21.37.3,2.12,1.03,2.01,1.29-.21.92-1.72,1.16-2.26,12.71-.93,31.56-7.01,39.16-18.82,9.76-15.17,10.81-34.28,3.05-50.48s-24.35-22.57-40.06-23.87c1.65-2.66-4.83-1.87-7.18-1.87l-67.79.1c-.43,0,.28,2.2.56,1.93Z"/>
+    </g>
+    <g fill="var(--bc-arco,currentColor)">
+      <path d="M350.38,195.8c-6.42-1.59-10.95-1.77-17.7-2.63-14.92-1.9-51.26-1.56-65.97,1.6l-18.31,2.49c-1.7.23-2.98,1.04-3.92,1.92-6.33-.88-26.39,5.01-33,7.28l-19.29,6.63c-6.58,2.26-24.01,9.66-28.53,13.78-2.94.65-5.01,1.39-7.17,2.59-9.56,5.3-18.56,10.9-27.39,17.36l-7.4,4.47,5.74-5.99c48.92-43.67,114.81-65.66,180.13-66.15,15.94.49,31.05,2.15,46.64,4.8l25.22,5.96c29.29,6.92,65.87,26.48,90.02,44.7,4.44,3.35,8.65,6.6,12.65,10.4,4.52,4.28,6.97,4.67,6.49,5.91-.8,2.06-2.05-1.08-7.32-4.32l-20.49-12.59c-29.47-18.12-76.41-34.16-110.41-38.22Z"/>
+      <path d="M157.73,73.3c-2.78-.23-5.83.22-9.18.22l-65.22-.06c-.28.27-1-1.93-.56-1.93l67.79-.1c2.35,0,8.83-.8,7.18,1.87Z"/>
+      <path d="M155.58,166.46c-.24.53.13,2.05-1.16,2.26-.74.12-.82-1.64-1.03-2.01l2.19-.25Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="progress" id="prog"></div>
+
+<header id="hdr">
+  <div class="wrap header-row">
+    <a class="logo" href="#top">
+      <svg class="bcmark" role="img" aria-label="Bridge Control"><use href="#bcmark"></use></svg>
+      <span class="logo-txt">JOSÉ FERREIRA<em>Bridge Control</em></span>
+    </a>
+    <nav class="top">
+      <a href="#problema">O problema</a>
+      <a href="#servico">O que faço</a>
+      <a href="#processo">Como funciona</a>
+      <a href="#perguntas">Perguntas</a>
+      <a class="mini" href="mailto:jose.ferreira@bridgecontrol.eu?subject=Novo%20Projeto">Enviar projeto</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero" id="hero">
+  <svg class="hero-mark" aria-hidden="true" focusable="false"><use href="#bcmark"></use></svg>
+  <div class="wrap">
+    <div class="eyebrow">Para ateliers, developers e hospitality</div>
+    <h1>Precisa de um fornecedor certo para o projeto? <span class="hl"><i>Eu trato dessa parte.</i></span></h1>
+
+    <div class="hero-copy">
+      <p class="lead">
+        Apoio equipas de projeto a transformar especificações em soluções executáveis,
+        identificando e coordenando fabricantes para
+        <strong>carpintaria, mobiliário por medida e FF&amp;E</strong>.
+      </p>
+
+      <div class="hero-side">
+        <div class="small">
+          Menos tempo gasto em procura, consultas, follow-up e comparação.
+          Mais clareza sobre quem pode executar, a que preço, em que prazo e com que risco.
+        </div>
+        <div class="hero-actions">
+          <a class="cta" href="mailto:jose.ferreira@bridgecontrol.eu?subject=Novo%20Projeto"><span>Enviar projeto</span><span class="arw">→</span></a>
+          <a class="cta ghost" href="#servico"><span>Ver o que faço</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b data-count="17">17</b><small>anos entre indústria, compras, orçamentação e gestão de projeto</small></div>
+      <div class="stat"><b data-count="6">6</b><small>marcas de referência do segmento contract orçamentadas tecnicamente</small></div>
+      <div class="stat"><b data-count="4">4</b><small>elos coordenados no mesmo projeto: desenho, compras, produção e montagem</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span class="grp"><em>Joinery</em><em>Bespoke furniture</em><em>FF&amp;E</em><em>Hospitality</em><em>Retail</em><em>Residencial</em><em>Contract</em></span>
+    <span class="grp"><em>Joinery</em><em>Bespoke furniture</em><em>FF&amp;E</em><em>Hospitality</em><em>Retail</em><em>Residencial</em><em>Contract</em></span>
+    <span class="grp"><em>Joinery</em><em>Bespoke furniture</em><em>FF&amp;E</em><em>Hospitality</em><em>Retail</em><em>Residencial</em><em>Contract</em></span>
+    <span class="grp"><em>Joinery</em><em>Bespoke furniture</em><em>FF&amp;E</em><em>Hospitality</em><em>Retail</em><em>Residencial</em><em>Contract</em></span>
+    <span class="grp"><em>Joinery</em><em>Bespoke furniture</em><em>FF&amp;E</em><em>Hospitality</em><em>Retail</em><em>Residencial</em><em>Contract</em></span>
+    <span class="grp"><em>Joinery</em><em>Bespoke furniture</em><em>FF&amp;E</em><em>Hospitality</em><em>Retail</em><em>Residencial</em><em>Contract</em></span>
+  </div>
+</div>
+
+<section id="quem">
+  <div class="wrap section-grid">
+    <div class="kicker">Quem sou</div>
+    <div>
+      <h2>Gestão de projeto, procurement e indústria — <span class="thin">com experiência dos dois lados da decisão.</span></h2>
+
+      <div class="about">
+        <div class="about-copy">
+          <p>
+            Sou <strong>José Ferreira</strong>. O meu percurso passa por <strong>aprovisionamento e operações,
+            orçamentação e desenvolvimento técnico, gestão de projetos e PMO</strong>, sempre na ligação entre
+            cliente, equipa de projeto, fornecedores e produção.
+          </p>
+          <p>
+            Ao longo desse percurso coordenei <strong>desenho, compras, fornecedores, produção, logística e montagem</strong>,
+            acompanhando o projeto desde os requisitos e orçamento até à entrega. Isso permite-me avaliar uma proposta
+            para além do valor final: <strong>o que está incluído, se é tecnicamente viável, se o fornecedor tem capacidade,
+            onde estão os riscos e se o prazo é realista</strong>.
+          </p>
+          <p class="pull">Ligar a necessidade do projeto à capacidade certa para a executar.</p>
+          <p>
+            Não substituo a equipa de projeto; entro onde é preciso acelerar decisões, encontrar alternativas,
+            estruturar propostas e manter fornecedores alinhados até existir uma solução clara e executável.
+          </p>
+        </div>
+
+        <div class="about-side">
+          <div><strong>Gestão de Projeto &amp; PMO</strong>Planeamento, prioridades, riscos, alterações, reporting e controlo de entregas.</div>
+          <div><strong>Procurement &amp; Fornecedores</strong>Consultas, seleção, comparação, negociação, follow-up e avaliação de capacidade.</div>
+          <div><strong>Técnico &amp; Produção</strong>Orçamentação, leitura técnica, materiais, viabilidade e preparação para fabrico.</div>
+          <div><strong>Operações &amp; Entrega</strong>Produção, logística, montagem, qualidade, incidências e fecho do projeto.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="problema">
+  <div class="wrap section-grid">
+    <div class="kicker">O problema</div>
+    <div>
+      <h2>Não precisa de mais contactos. <span class="thin">Precisa de alguém que faça o processo avançar.</span></h2>
+
+      <div class="problem-list">
+        <div class="problem">
+          <div class="n">01</div>
+          <strong>Não tenho fornecedor para esta peça.</strong>
+          <span>Procuro e qualifico fabricantes em função da peça, materiais, complexidade, volume, prazo e localização do projeto.</span>
+        </div>
+        <div class="problem">
+          <div class="n">02</div>
+          <strong>O preço está demasiado alto.</strong>
+          <span>Procuro alternativas de fornecedor, construção ou material, mantendo o nível técnico e estético definido para o projeto.</span>
+        </div>
+        <div class="problem">
+          <div class="n">03</div>
+          <strong>Tenho propostas, mas não consigo compará-las.</strong>
+          <span>Normalizo as propostas e comparo âmbito, materiais, exclusões, condições, prazo e preço para evitar decisões baseadas apenas no total final.</span>
+        </div>
+        <div class="problem">
+          <div class="n">04</div>
+          <strong>Ninguém responde a tempo.</strong>
+          <span>Centralizo consultas, esclarecimentos e follow-up, identifico bloqueios e mantenho visível o próximo passo de cada fornecedor.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servico">
+  <div class="wrap section-grid">
+    <div class="kicker">O que faço</div>
+    <div>
+      <h2>Três coisas. <span class="thin">Sem complicar.</span></h2>
+
+      <div class="triplet">
+        <div class="card">
+          <div class="ghostnum">01</div>
+          <b>Encontrar</b>
+          <h3>Fornecedores que conseguem mesmo fazer a peça.</h3>
+          <p>Identifico e filtro fornecedores adequados ao âmbito, avaliando capacidade técnica, experiência, localização, prazo e enquadramento de preço.</p>
+        </div>
+        <div class="card">
+          <div class="ghostnum">02</div>
+          <b>Comparar</b>
+          <h3>Propostas lado a lado, sem surpresas escondidas.</h3>
+          <p>Estruturo a comparação para perceber diferenças reais entre propostas: preço, âmbito, materiais, exclusões, condições, prazo e riscos.</p>
+        </div>
+        <div class="card">
+          <div class="ghostnum">03</div>
+          <b>Coordenar</b>
+          <h3>O processo a avançar até estar entregue.</h3>
+          <p>Faço a ponte entre projeto e fornecedor nas clarificações, aprovações, alterações, produção, logística e entrega, dentro do âmbito acordado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="processo">
+  <div class="wrap section-grid">
+    <div class="kicker">Como funciona</div>
+    <div>
+      <h2>Do desenho <span class="thin">à solução adjudicável.</span></h2>
+
+      <div class="process">
+        <div class="step"><div class="bad">01</div><strong>Recebo e enquadro o projeto</strong></div>
+        <div class="step"><div class="bad">02</div><strong>Seleciono fornecedores adequados</strong></div>
+        <div class="step"><div class="bad">03</div><strong>Estruturo e acompanho os pedidos</strong></div>
+        <div class="step"><div class="bad">04</div><strong>Comparo propostas e riscos</strong></div>
+        <div class="step"><div class="bad">05</div><strong>Apoio a decisão e negociação</strong></div>
+        <div class="step"><div class="bad">06</div><strong>Coordeno o âmbito adjudicado</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="porque">
+  <div class="wrap section-grid">
+    <div class="kicker">Porque eu</div>
+    <div>
+      <h2>Porque consigo falar com o designer, <span class="thin">com quem compra e com quem fabrica.</span></h2>
+
+      <div class="triplet">
+        <div class="card">
+          <b>Projeto</b>
+          <h3>Percebo o que está desenhado.</h3>
+          <p>Leio desenhos, especificações, materiais, quantidades e condicionantes para perceber o que está realmente a ser pedido.</p>
+        </div>
+        <div class="card">
+          <b>Negócio</b>
+          <h3>Percebo o que tem de fechar.</h3>
+          <p>Consigo olhar para preço, prazo, negociação, impacto das alterações e critérios de decisão sem perder a lógica comercial do projeto.</p>
+        </div>
+        <div class="card">
+          <b>Indústria</b>
+          <h3>Percebo o que é executável.</h3>
+          <p>Conheço as limitações de produção, preparação técnica, compras, capacidade, logística e montagem que podem comprometer uma proposta no terreno.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="perguntas">
+  <div class="wrap section-grid">
+    <div class="kicker">Perguntas diretas</div>
+    <div>
+      <h2>O que um cliente <span class="thin">normalmente quer saber.</span></h2>
+
+      <div class="faq">
+        <details open>
+          <summary>Porque não falo diretamente com a fábrica?</summary>
+          <div class="ans">
+            Pode — e em muitos casos deve. Eu acrescento valor quando é preciso <strong>encontrar alternativas,
+            comparar propostas de forma consistente, validar capacidade e manter o processo a avançar</strong>
+            sem desviar a equipa de projeto para tarefas de procurement e follow-up.
+          </div>
+        </details>
+        <details>
+          <summary>És agente de alguma fábrica?</summary>
+          <div class="ans">
+            Não trabalho com a obrigação de colocar um fabricante específico. Parto da necessidade do projeto
+            e avalio a solução em função de adequação técnica, capacidade, prazo, localização e enquadramento comercial.
+          </div>
+        </details>
+        <details>
+          <summary>Já tenho fornecedores. Ainda faz sentido?</summary>
+          <div class="ans">
+            Sim. Não preciso de substituir uma rede que já funciona. Posso entrar apenas onde exista uma lacuna:
+            segunda proposta, capacidade adicional, especialidade diferente, validação de mercado ou acompanhamento
+            de um fornecedor específico.
+          </div>
+        </details>
+        <details>
+          <summary>Que áreas cobres?</summary>
+          <div class="ans">
+            O foco principal é <strong>joinery, bespoke furniture e FF&amp;E</strong>, onde tenho conhecimento técnico,
+            operacional e de fornecedores. Outras especialidades podem ser integradas quando fizer sentido e existir
+            parceiro adequado.
+          </div>
+        </details>
+        <details>
+          <summary>O projeto e a informação partilhada ficam confidenciais?</summary>
+          <div class="ans">
+            Sim. A documentação recebida é utilizada apenas para o âmbito acordado e partilhada com potenciais
+            fornecedores apenas na medida necessária para desenvolver ou cotar a solução. Quando o projeto o exige,
+            posso trabalhar ao abrigo de <strong>NDA</strong> antes de receber documentação sensível.
+          </div>
+        </details>
+        <details>
+          <summary>Como és pago?</summary>
+          <div class="ans">
+            Depende do âmbito. Pode ser um <strong>fee pontual de sourcing</strong>, um <strong>fee por projeto</strong>
+            para acompanhamento de um pacote definido ou um <strong>retainer</strong> quando existe necessidade recorrente.
+            Antes de começar ficam claros o âmbito, os entregáveis e a forma de remuneração.
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <div class="final-box">
+      <div>
+        <div class="eyebrow">Próximo passo</div>
+        <h2>Envie-me o projeto. Eu digo-lhe onde consigo ser útil.</h2>
+        <p>Desenhos, quantidades, materiais, prazo, localização e — quando existir — referência de orçamento
+        são suficientes para uma primeira análise. Digo-lhe rapidamente se consigo acrescentar valor e em que âmbito.</p>
+      </div>
+      <div class="contact-side">
+        <div class="bc-lockup">
+          <svg class="bcmark" role="img" aria-label="Bridge Control"><use href="#bcmark"></use></svg>
+          <span>Bridge Control</span>
+        </div>
+        <a class="cta light" href="mailto:jose.ferreira@bridgecontrol.eu?subject=Novo%20Projeto"><span>Enviar projeto</span><span class="arw">→</span></a>
+        <div class="contact-lines">
+          <div><i>Email</i><a href="mailto:jose.ferreira@bridgecontrol.eu">jose.ferreira@bridgecontrol.eu</a></div>
+          <div><i>Telefone</i><a href="tel:+351912632342">(+351) 912 632 342</a></div>
+          <div><i>Base</i>Paredes, Portugal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="foot-brand">
+    <svg class="bcmark" role="img" aria-label="Bridge Control"><use href="#bcmark"></use></svg>
+    <span>© <span id="yr">2026</span> José Ferreira · Bridge Control</span>
+  </div>
+  <div>Joinery · Bespoke Furniture · FF&amp;E</div>
+</footer>
+
+</main>
+
+<script>
+(function(){
+ try{
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* barra de progresso + header condensado */
+  var prog = document.getElementById('prog'), hdr = document.getElementById('hdr'), ticking = false;
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.transform = 'scaleX(' + (h > 0 ? window.scrollY / h : 0) + ')';
+    hdr.classList.toggle('is-stuck', window.scrollY > 12);
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; window.requestAnimationFrame(onScroll); }
+  }, {passive:true});
+  onScroll();
+
+  if(reduce){
+    document.getElementById('hero').classList.add('reduced');
+    return;
+  }
+
+  /* contagem dos três números, uma vez, ao abrir */
+  var nums = [].slice.call(document.querySelectorAll('[data-count]'));
+  nums.forEach(function(el){ el.textContent = '0'; });
+
+  function conta(el){
+    var alvo = parseInt(el.getAttribute('data-count'), 10), t0 = null;
+    function passo(t){
+      if(t0 === null) t0 = t;
+      var p = Math.min((t - t0) / 900, 1);
+      el.textContent = Math.round(alvo * (1 - Math.pow(1 - p, 3)));
+      if(p < 1) requestAnimationFrame(passo);
+    }
+    requestAnimationFrame(passo);
+  }
+
+  setTimeout(function(){ nums.forEach(conta); }, 260);
+ }catch(e){
+  /* se algo falhar, os números ficam com o valor final escrito no HTML */
+  [].forEach.call(document.querySelectorAll('[data-count]'), function(el){
+    el.textContent = el.getAttribute('data-count');
+  });
+ }
+})();
+</script>
+</body>
+</html>
